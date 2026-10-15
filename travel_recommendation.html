@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Recommendation</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        nav {
+            background-color: #003366;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav h2 {
+            margin-right: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav input {
+            margin-left: auto;
+            padding: 8px;
+            width: 220px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        nav button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .reset-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .hero {
+            background: url("images/background.jpg") center center/cover;
+            height: 500px;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        .hero p {
+            font-size: 22px;
+            max-width: 800px;
+            margin: auto;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        #results {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card h3 {
+            padding: 15px 15px 5px;
+            color: #003366;
+        }
+
+        .card p {
+            padding: 0 15px 15px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>Travel Recommendation</h2>
+
+        <a hrefa>
+        <a href="aboutt Us</a>
+        <antact.htmlContact Us</a>
+
+        <input type="text" id="searchInput" placeholder="Enter beach, temple, or country">
+
+        <button class="search-btn" onclick="searchRecommendation()">
+            Search
+        </button>
+
+        <button class="reset-btn" onclick="clearResults()">
+            Reset
+        </button>
+    </nav>
+
+    <section class="hero">
+        <h1>Explore Dream Destinations</h1>
+
+        <p>
+            Discover beautiful beaches, historic temples, and
+            amazing countries around the world. Find your next
+            unforgettable travel destination today!
+        </p>
+    </section>
+
+    <div id="results"></div>
+
+    <script>
+
+        let travelData = {};
+
+        fetch("travel_recommendation_api.json")
+            .then(response => response.json())
+            .then(data => {
+                travelData = data;
+                console.log(data);
+            })
+            .catch(error => console.error(error));
+
+        function searchRecommendation() {
+
+            const keyword = document
+                .getElementById("searchInput")
+                .value
+                .trim()
+                .toLowerCase();
+
+            if (
+                keyword === "beach" ||
+                keyword === "beaches"
+            ) {
+
+                displayResults(travelData.beaches);
+
+            }
+            else if (
+                keyword === "temple" ||
+                keyword === "temples"
+            ) {
+
+                displayResults(travelData.temples);
+
+            }
+            else if (
+                keyword === "country" ||
+                keyword === "countries"
+            ) {
+
+                let countries = [];
+
+                travelData.countries.forEach(country => {
+                    countries.push(...country.cities);
+                });
+
+                displayResults(countries);
+
+            }
+            else {
+
+                document.getElementById("results").innerHTML =
+                    "<h2>No recommendations found.</h2>";
+            }
+        }
+
+        function displayResults(items) {
+
+            const results = document.getElementById("results");
+
+            results.innerHTML = "";
+
+            items.forEach(item => {
+
+                results.innerHTML += `
+                    <div class="card">
+
+                        <img src="${item.imageUrl}" alt="${item.name}">
+
+                        <h3>${item.name}</h3>
+
+                        <p>${item.description}</p>
+
+                    </div>
+                `;
+            });
+        }
+
+        function clearResults() {
+
+            document.getElementById("results").innerHTML = "";
+            document.getElementById("searchInput").value = "";
+        }
+
+    </script>
+
+</body>
+
+</html>
