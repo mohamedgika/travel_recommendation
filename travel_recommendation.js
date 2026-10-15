@@ -1,83 +1,61 @@
-let travelData = {};
-
-// Fetch data from JSON file
-fetch('travel_recommendation_api.json')
-    .then(response => response.json())
-    .then(data => {
-        travelData = data;
-        console.log(data);
-    })
-    .catch(error => console.error('Error loading data:', error));
-
-// Search recommendations
 function searchRecommendation() {
 
-    const keyword = document
-        .getElementById("searchInput")
+    const searchText =
+        document.getElementById("searchInput")
         .value
-        .trim()
         .toLowerCase();
 
-    // Beach search
-    if (
-        keyword === "beach" ||
-        keyword === "beaches"
-    ) {
+    const resultsDiv =
+        document.getElementById("results");
 
-        displayResults(travelData.beaches);
+    resultsDiv.innerHTML = "";
 
-    }
-    // Temple search
-    else if (
-        keyword === "temple" ||
-        keyword === "temples"
-    ) {
+    const destinations = [
 
-        displayResults(travelData.temples);
+        {
+            name: "Sydney",
+            image:
+            "https://images.unsplash.com/photo-1506973035872-a4ec16b8d0b9",
+            description:
+            "Sydney Opera House and Harbour Bridge."
+        },
 
-    }
-    // Country search
-    else if (
-        keyword === "country" ||
-        keyword === "countries"
-    ) {
+        {
+            name: "Bora Bora",
+            image:
+            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+            description:
+            "Beautiful beaches and blue lagoons."
+        },
 
-        let countryResults = [];
+        {
+            name: "Kyoto",
+            image:
+            "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e",
+            description:
+            "Historic temples and rich culture."
+        }
+    ];
 
-        travelData.countries.forEach(country => {
-            countryResults.push(...country.cities);
-        });
+    const filtered = destinations.filter(item =>
+        item.name.toLowerCase().includes(searchText)
+    );
 
-        displayResults(countryResults);
+    filtered.forEach(item => {
 
-    } else {
-
-        document.getElementById("results").innerHTML =
-            "<h2>No recommendations found.</h2>";
-    }
-}
-
-// Display results
-function displayResults(items) {
-
-    const resultsContainer = document.getElementById("results");
-
-    resultsContainer.innerHTML = "";
-
-    items.forEach(item => {
-
-        resultsContainer.innerHTML += `
-      <div class="card">
-        <img src="${item.imageUrl}" alt="${item.description}</h3>
-        <p>${item.description}</p>
-      </div>
-    `;
+        resultsDiv.innerHTML += `
+            <div class="result-card">
+                ${item.image}
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+            </div>
+        `;
     });
 }
 
-// Clear search results
 function clearResults() {
 
     document.getElementById("searchInput").value = "";
+
     document.getElementById("results").innerHTML = "";
 }

@@ -1,242 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Recommendation</title>
+    <title>TravelBloom</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    travel_recommendation.css
 
-        body {
-            background-color: #f4f4f4;
-        }
-
-        nav {
-            background-color: #003366;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        nav h2 {
-            margin-right: 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav input {
-            margin-left: auto;
-            padding: 8px;
-            width: 220px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        nav button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .reset-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .hero {
-            background: url("images/background.jpg") center center/cover;
-            height: 500px;
-            color: white;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .hero h1 {
-            font-size: 60px;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 5px black;
-        }
-
-        .hero p {
-            font-size: 22px;
-            max-width: 800px;
-            margin: auto;
-            text-shadow: 1px 1px 3px black;
-        }
-
-        #results {
-            padding: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-        }
-
-        .card img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .card h3 {
-            padding: 15px 15px 5px;
-            color: #003366;
-        }
-
-        .card p {
-            padding: 0 15px 15px;
-            line-height: 1.5;
-        }
-    </style>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-    <nav>
-        <h2>Travel Recommendation</h2>
+    <!-- Navbar -->
+    <nav class="navbar">
 
-        <a hrefa>
-        <a href="aboutt Us</a>
-        <antact.htmlContact Us</a>
+        <div class="logo">
+              <h2>TravelBloom</h2>
+        </div>
 
-        <input type="text" id="searchInput" placeholder="Enter beach, temple, or country">
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li   <li><a href="htmlAbout Us</a></li>
+            <li>contact_us.htmlContact Us</a></li>
+        </ul>
 
-        <button class="search-btn" onclick="searchRecommendation()">
-            Search
-        </button>
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Enter a destination or keyword">
 
-        <button class="reset-btn" onclick="clearResults()">
-            Reset
-        </button>
+            <button onclick="searchRecommendation()">
+                Search
+            </button>
+
+            <button onclick="clearResults()">
+                Clear
+            </button>
+        </div>
+
     </nav>
 
-    <section class="hero">
-        <h1>Explore Dream Destinations</h1>
+    <!-- Social Icons -->
+    <div class="social-icons">
+        #<i class="fab fa-twitter"></i></a>
+        <ai class="fab fa-facebook-f"></i></a>
+        <ai class="fab fa-instagram"></i></a>
+        <ai class="fab fa-youtube"></i></a>
+    </div>
 
-        <p>
-            Discover beautiful beaches, historic temples, and
-            amazing countries around the world. Find your next
-            unforgettable travel destination today!
-        </p>
+    <!-- Hero Section -->
+    <section class="hero">
+
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+
+            <h1>
+                EXPLORE DREAM <br>
+                DESTINATION
+            </h1>
+
+            <p>
+                The Travel Recommendation App helps users explore
+                popular travel destinations through an interactive and
+                user-friendly interface. It allows users to search
+                for beaches, temples, countries, or specific country names
+                to view related cities along with images and descriptions.
+            </p>
+
+            <button class="book-btn">
+                Book Now
+            </button>
+
+        </div>
+
+        <div id="results"></div>
+
     </section>
 
-    <div id="results"></div>
-
-    <script>
-
-        let travelData = {};
-
-        fetch("travel_recommendation_api.json")
-            .then(response => response.json())
-            .then(data => {
-                travelData = data;
-                console.log(data);
-            })
-            .catch(error => console.error(error));
-
-        function searchRecommendation() {
-
-            const keyword = document
-                .getElementById("searchInput")
-                .value
-                .trim()
-                .toLowerCase();
-
-            if (
-                keyword === "beach" ||
-                keyword === "beaches"
-            ) {
-
-                displayResults(travelData.beaches);
-
-            }
-            else if (
-                keyword === "temple" ||
-                keyword === "temples"
-            ) {
-
-                displayResults(travelData.temples);
-
-            }
-            else if (
-                keyword === "country" ||
-                keyword === "countries"
-            ) {
-
-                let countries = [];
-
-                travelData.countries.forEach(country => {
-                    countries.push(...country.cities);
-                });
-
-                displayResults(countries);
-
-            }
-            else {
-
-                document.getElementById("results").innerHTML =
-                    "<h2>No recommendations found.</h2>";
-            }
-        }
-
-        function displayResults(items) {
-
-            const results = document.getElementById("results");
-
-            results.innerHTML = "";
-
-            items.forEach(item => {
-
-                results.innerHTML += `
-                    <div class="card">
-
-                        <img src="${item.imageUrl}" alt="${item.name}">
-
-                        <h3>${item.name}</h3>
-
-                        <p>${item.description}</p>
-
-                    </div>
-                `;
-            });
-        }
-
-        function clearResults() {
-
-            document.getElementById("results").innerHTML = "";
-            document.getElementById("searchInput").value = "";
-        }
-
-    </script>
+    <script src="travelon.jsscript>
 
 </body>
-
 </html>
