@@ -3,60 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelBloom</title>
-
-    travel_recommendation.css
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="description" content="Discover inspiring beaches, temples, and destinations with TravelBloom.">
+    <title>TravelBloom | Find your next destination</title>
+    <link rel="stylesheet" href="travel_recommendation.css">
+    <script src="travel_recommendation.js" defer></script>
 </head>
 <body>
+    <nav class="navbar" aria-label="Main navigation">
+        <a class="logo" href="index.html" aria-label="TravelBloom home">
+            <span class="logo-mark" aria-hidden="true">✳</span>
+            <span>Travel<span class="logo-accent">Bloom</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a class="active" href="index.html" aria-current="page">Home</a></li>
+            <li><a href="about_us.html">About Us</a></li>
+            <li><a href="contact_us.html">Contact Us</a></li>
+        </ul>
+        <form class="search-box" id="searchForm" role="search">
+            <label class="visually-hidden" for="searchInput">Search destinations</label>
+            <input id="searchInput" name="query" type="search"
+                placeholder="Search beaches, temples, countries..." autocomplete="off">
+            <button class="button button-primary" type="submit">Search</button>
+            <button class="button button-quiet" id="clearButton" type="button">Clear</button>
+        </form>
+    </nav>
 
-<nav class="navbar">
-    <div class="logo">
-        <i class="fas fa-globe"></i>
-        <h2>Travelav-links">
-        <li>index.htmlHome</a></li>
-        <li><a href="htmlAbout Us</a></li>
-        <li><a href="contact_usact Us</a></li>
-    </ul>
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="social-rail" aria-label="Follow TravelBloom">
+                <a href="https://www.facebook.com/" aria-label="Facebook">f</a>
+                <a href="https://www.instagram.com/" aria-label="Instagram">ig</a>
+                <a href="https://www.youtube.com/" aria-label="YouTube">▶</a>
+            </div>
+            <div class="hero-content">
+                <p class="eyebrow">A world of wonder awaits</p>
+                <h1 id="hero-title">Explore dream<br>destinations.</h1>
+                <p class="hero-copy">Find places that move you, from sunlit shores to ancient wonders. Let your next story begin somewhere unforgettable.</p>
+                <a class="button button-primary book-button" href="contact_us.html">Book Now</a>
+            </div>
+            <a class="scroll-cue" href="#discover">Scroll to discover <span aria-hidden="true">↓</span></a>
+        </section>
 
-    <div class="search-box">
-        <input type="text" id="searchInput"
-            placeholder="Enter a destination or keyword">
+        <section class="discover section-wrap" id="discover" aria-labelledby="discover-title">
+            <div class="section-heading">
+                <p class="eyebrow">Your next great escape</p>
+                <h2 id="discover-title">Find your kind of somewhere</h2>
+                <p>Search for a country, city, beach, or temple to explore handpicked recommendations.</p>
+            </div>
+            <p class="results-status" id="resultsStatus" role="status" aria-live="polite">Try “beach”, “temple”, or a country like “Japan”.</p>
+            <div class="results-grid" id="results" aria-label="Travel recommendations"></div>
+        </section>
+    </main>
 
-        <button onclick="searchRecommendation()">Search</button>
-        <button onclick="clearResults()">Clear</button>
-    </div>
-</nav>
-
-<div class="social-icons">
-    #<i class="fab fa-twitter"></i></a>
-    <a href="#"><i class="fab fa-facebook-f">< <a href="#"><i classstagram"></i></a>
-    <a href="#"><i class="fab fa/i></a>
-</div>
-
-<section class="hero">
-
-    <div class="hero-content">
-        <h1>EXPLORE DREAM<br>DESTINATION</h1>
-
-        <p>
-            The Travel Recommendation App helps users explore popular travel
-            destinations through an interactive and user-friendly interface.
-            It allows users to search for beaches, temples, countries, or
-            specific country names to view related cities along with images
-            and descriptions.
-        </p>
-
-        <button class="book-btn">Book Now</button>
-    </div>
-
-    <div id="results"></div>
-
-</section>
-
-<script src="travel_n.jsscript>
-
+    <footer class="site-footer">
+        <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true">✳</span><span>Travel<span class="logo-accent">Bloom</span></span></a>
+        <p>Find your way to something wonderful.</p>
+        <span>© 2026 TravelBloom</span>
+    </footer>
 </body>
 </html>

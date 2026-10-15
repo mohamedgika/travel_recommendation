@@ -3,56 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-
-    <linkl_recommendation.css
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="description" content="Contact the TravelBloom team about your next journey.">
+    <title>Contact Us | TravelBloom</title>
+    <link rel="stylesheet" href="travel_recommendation.css">
 </head>
 <body>
+    <nav class="navbar" aria-label="Main navigation">
+        <a class="logo" href="index.html" aria-label="TravelBloom home">
+            <span class="logo-mark" aria-hidden="true">✳</span>
+            <span>Travel<span class="logo-accent">Bloom</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about_us.html">About Us</a></li>
+            <li><a class="active" href="contact_us.html" aria-current="page">Contact Us</a></li>
+        </ul>
+    </nav>
 
-<nav class="navbar">
-    <div class="logo">
-        <i classBloom</h2>
-    </div>
+    <main class="contact-page">
+        <div class="contact-layout">
+            <section aria-labelledby="contact-title">
+                <p class="eyebrow">We'd love to hear from you</p>
+                <h1 class="page-title" id="contact-title">Let's talk<br>travel.</h1>
+                <p class="contact-intro">Questions, ideas, or a destination you think we should feature? Send a note and our team will be glad to hear from you.</p>
+                <a class="contact-email" href="mailto:hello@travelbloom.example">hello@travelbloom.example</a>
+            </section>
 
-    <ul class="nav-links">
-        <li><a href="index.html">i>
-        <li><bout_us.htmlAbout Us</a></li>
-        <li><a href="contact_us.html">/a></li>
-    </ul>
-</nav>
+            <form class="contact-form" action="mailto:hello@travelbloom.example" method="post" enctype="text/plain">
+                <label for="contactName">Name
+                    <input id="contactName" name="Name" type="text" autocomplete="name" required>
+                </label>
+                <label for="contactEmail">Email
+                    <input id="contactEmail" name="Email" type="email" autocomplete="email" required>
+                </label>
+                <label for="contactMessage">Message
+                    <textarea id="contactMessage" name="Message" rows="5" required></textarea>
+                </label>
+                <button class="button button-primary" type="submit">Send a message</button>
+                <p class="form-note">This demo form opens your email app. Replace the example address with your contact email before publishing.</p>
+            </form>
+        </div>
+    </main>
 
-<div class="social-icons">
-    #<i class="fab fa-twitter"></i></a>
-    <a href="#"><i class="fab fa-facebook>
-    <a href="#"><i classstagram"></i></a>
-    #<i class="fab fa-youtube"></i></a>
-</div>
-
-<section class="contact-page">
-
-    <div class="contact-left">
-        <h1>CONTACT US</h1>
-        <p>Get in touch</p>
-    </div>
-
-    <div class="contact-form">
-
-        <form>
-
-            <input type="text" placeholder="Name">
-            <input type="email" placeholder="Email">
-            <textarea rows="6" placeholder="Message"></textarea>
-
-            <button type="submit">Submit</button>
-
-        </form>
-
-    </div>
-
-</section>
-
+    <footer class="site-footer">
+        <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true">✳</span><span>Travel<span class="logo-accent">Bloom</span></span></a>
+        <p>Find your way to something wonderful.</p>
+        <span>© 2026 TravelBloom</span>
+    </footer>
 </body>
 </html>

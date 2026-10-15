@@ -1,61 +1,144 @@
-function searchRecommendation() {
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
+const clearButton = document.getElementById("clearButton");
+const resultsContainer = document.getElementById("results");
+const resultsStatus = document.getElementById("resultsStatus");
 
-    const searchText =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
+let recommendationsRequest;
 
-    const resultsDiv =
-        document.getElementById("results");
+function normalize(value) {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
 
-    resultsDiv.innerHTML = "";
+async function loadRecommendations() {
+    if (!recommendationsRequest) {
+        recommendationsRequest = fetch("travel_recommendation_api.json")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`The recommendations file could not be loaded (${response.status}).`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data || !Array.isArray(data.countries) ||
+                    !Array.isArray(data.beaches) || !Array.isArray(data.temples)) {
+                    throw new Error("The recommendations file has an unexpected format.");
+                }
+                return data;
+            });
+    }
+    return recommendationsRequest;
+}
 
-    const destinations = [
+function getCategory(query) {
+    const words = normalize(query).split(/\s+/);
+    if (words.some(word => ["beach", "beaches"].includes(word))) {
+        return "beaches";
+    }
+    if (words.some(word => ["temple", "temples"].includes(word))) {
+        return "temples";
+    }
+    if (words.some(word => ["country", "countries"].includes(word))) {
+        return "countries";
+    }
+    return null;
+}
 
-        {
-            name: "Sydney",
-            image:
-            "https://images.unsplash.com/photo-1506973035872-a4ec16b8d0b9",
-            description:
-            "Sydney Opera House and Harbour Bridge."
-        },
+function getRecommendations(data, query) {
+    const normalizedQuery = normalize(query);
+    const category = getCategory(query);
 
-        {
-            name: "Bora Bora",
-            image:
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-            description:
-            "Beautiful beaches and blue lagoons."
-        },
+    if (category === "beaches" || category === "temples") {
+        const label = category === "beaches" ? "Beach" : "Temple";
+        return data[category].map(item => ({ ...item, category: label }));
+    }
 
-        {
-            name: "Kyoto",
-            image:
-            "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e",
-            description:
-            "Historic temples and rich culture."
-        }
-    ];
-
-    const filtered = destinations.filter(item =>
-        item.name.toLowerCase().includes(searchText)
+    const countries = data.countries.flatMap(country =>
+        (country.cities || []).map(city => ({
+            ...city,
+            category: "Destination",
+            country: country.name
+        }))
     );
 
-    filtered.forEach(item => {
+    if (category === "countries" || !normalizedQuery) {
+        return countries;
+    }
 
-        resultsDiv.innerHTML += `
-            <div class="result-card">
-                ${item.image}
-                <h3>${item.name}</h3>
-                <p>${item.description}</p>
-            </div>
-        `;
+    return countries.filter(item =>
+        normalize(`${item.name} ${item.country} ${item.description}`).includes(normalizedQuery)
+    );
+}
+
+function renderRecommendations(items) {
+    resultsContainer.replaceChildren();
+
+    items.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "result-card";
+
+        const image = document.createElement("img");
+        image.src = item.imageUrl;
+        image.alt = item.name;
+        image.loading = "lazy";
+
+        const content = document.createElement("div");
+        content.className = "result-card-content";
+
+        const category = document.createElement("p");
+        category.className = "result-category";
+        category.textContent = item.country
+            ? `Destination · ${item.country}`
+            : item.category;
+
+        const title = document.createElement("h3");
+        title.textContent = item.name;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        content.append(category, title, description);
+        card.append(image, content);
+        resultsContainer.append(card);
     });
 }
 
-function clearResults() {
+searchForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
 
-    document.getElementById("searchInput").value = "";
+    if (!query) {
+        resultsContainer.replaceChildren();
+        resultsStatus.textContent = "Enter a destination or try “beach”, “temple”, or “country”.";
+        searchInput.focus();
+        return;
+    }
 
-    document.getElementById("results").innerHTML = "";
-}
+    resultsStatus.textContent = "Finding recommendations...";
+    try {
+        const data = await loadRecommendations();
+        const items = getRecommendations(data, query);
+        renderRecommendations(items);
+        resultsStatus.textContent = items.length
+            ? `${items.length} recommendation${items.length === 1 ? "" : "s"} found for “${query}”.`
+            : `No recommendations found for “${query}”. Try “beach”, “temple”, or a country name.`;
+    } catch (error) {
+        console.error("Unable to search travel recommendations:", error);
+        recommendationsRequest = undefined;
+        resultsContainer.replaceChildren();
+        resultsStatus.textContent = error instanceof Error
+            ? error.message
+            : "Unable to load recommendations. Please try again.";
+    }
+});
+
+clearButton.addEventListener("click", () => {
+    searchInput.value = "";
+    resultsContainer.replaceChildren();
+    resultsStatus.textContent = "Try “beach”, “temple”, or a country like “Japan”.";
+    searchInput.focus();
+});
